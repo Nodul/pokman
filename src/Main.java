@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,19 +19,19 @@ public class Main {
     private static void Init(){
 
         // Draw main window
-        var mainFrame = new JFrame("Pokman");
+        var mainWindowFrame = new JFrame("Pokman");
 
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        mainFrame.setSize(600, 500);
-        mainFrame.setLocationRelativeTo(null);
+        mainWindowFrame.setSize(600, 500);
+        mainWindowFrame.setLocationRelativeTo(null);
 
-        mainFrame.setVisible(true);
+        mainWindowFrame.setVisible(true);
 
-        var grid = new GridLayout(12,12);//(12,12,0,0);
-        var constraints = new GridBagConstraints();
-        mainFrame.setLayout(grid);
+        var grid = new GridLayout(12,12,0,0);//(12,12,0,0);
+        mainWindowFrame.setLayout(grid);
 
+        // region DEBUG MAP
         // Prepare debug map
         map = new Cell[12][12];
 
@@ -51,32 +52,22 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        // Render initial map for prototyping purposes
+        // endregion
 
+        // Render initial map for prototyping purposes
         for(int y = 0; y < 12; y++){
             for(int x = 0; x < 12; x++){
                 var cell = map[x][y];
                 // var image = cell.GetIsWall() ? "X" : " "; // TODO after loading test wall, render it instead of the "X" or " "
 
-                JPanel  cellPanel = new JPanel();
-
-               // cellPanel.setBounds(x,y,32,32);
-
                 var icon = new ImageIcon(cell.GetIsWall() ? wall_sprite : floor_sprite);
-                JLabel picLabel = new JLabel(icon);
-               // picLabel.setMaximumSize(new Dimension(32,32));// setSize(32,32);
-               // grid.
-                //picLabel.setBounds(x,y,32,32);
-                picLabel.setVisible(true);
-               // cellPanel.setLocation(x,y);
-                constraints.gridx = 0;
-                constraints.gridy = 0;
-                constraints.gridwidth = x;
-                constraints.gridheight = y;
-                constraints.fill = GridBagConstraints.CENTER;
 
-                cellPanel.add(picLabel);//,constraints);
-                mainFrame.add(cellPanel);//,x,y);
+                JLabel picLabel = new JLabel(icon);
+                picLabel.setBorder(new LineBorder(Color.cyan));
+
+                picLabel.setVisible(true);
+
+                mainWindowFrame.add(picLabel);
             }
         }
     }
