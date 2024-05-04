@@ -22,20 +22,10 @@ public class Main {
         var mainWindowFrame = new JFrame("Pokman");
 
         mainWindowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        var gridLayout = new GridLayout(12,12);//(12,12,0,0);
-       // gridLayout.
-        //mainWindowFrame.setSize(600, 500);
+        var gridLayout = new GridBagLayout();
+
         mainWindowFrame.setLayout(gridLayout);
         mainWindowFrame.setLocationRelativeTo(null);
-        // mainWindowFrame.setLayout(grid);
-       // var mapContainerPanel = new JPanel(gridLayout);
-       // mainWindowFrame.add(mapContainerPanel);
-
-        //Create a panel and add components to it.
-//        JPanel contentPane = new JPanel(new BorderLayout());
-//        contentPane.setBorder(someBorder);
-//        contentPane.add(someComponent, BorderLayout.CENTER);
-//        contentPane.add(anotherComponent, BorderLayout.PAGE_END);
 
         // region DEBUG MAP
         // Prepare debug map
@@ -66,40 +56,30 @@ public class Main {
                 var cell = map[x][y];
                 JLabel picLabel = makeLabel(cell, wall_sprite, floor_sprite);
 
-               // picLabel.setBorder(new LineBorder(Color.cyan));
+                var constraints = new GridBagConstraints();
 
-               // picLabel.setVisible(true);
+                constraints.gridx = x;
+                constraints.gridy = y;
+                constraints.gridwidth = 1;
+                constraints.gridheight = 1;
 
-               // mapContainerPanel.add(picLabel);
-                mainWindowFrame.add(picLabel);
+                mainWindowFrame.add(picLabel, constraints);
             }
         }
 
         // Finalize
         mainWindowFrame.pack();
         mainWindowFrame.setVisible(true);
-      //  mapContainerPanel.setVisible(true);
     }
 
     private static JLabel makeLabel(Cell cell, BufferedImage wall_sprite, BufferedImage floor_sprite){
         JLabel label= new JLabel();
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setPreferredSize(new Dimension(28, 32));
-        var icon = new ImageIcon(cell.GetIsWall() ? wall_sprite : floor_sprite);
 
+        var icon = new ImageIcon(cell.GetIsWall() ? wall_sprite : floor_sprite);
         label.setIcon(icon);
-        label.setSize(icon.getIconWidth(), icon.getIconWidth());
-        label.setMaximumSize(new Dimension(28,32));
-        label.setBounds(0,0,28,32);// new Dimension(40,40));
-        //label.setIcon(icon);
-//        if(cell.GetIsWall()){
-//            label.setBackground(Color.blue);
-//        }
-//        else{
-//            label.setBackground(Color.white);
-//        }
         label.setOpaque(true);
-        //label.setBorder(BorderFactory createLineBorder(Color.cyan, 0));
+        // DEBUG
+        // label.setBorder(BorderFactory.createLineBorder(Color.cyan, 1));
         return label;
     }
 
