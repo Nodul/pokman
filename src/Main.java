@@ -38,6 +38,7 @@ public class Main {
             }
         }
 
+        // Load data
         // Load test wall
         BufferedImage wall_sprite = null;
         BufferedImage floor_sprite = null;
@@ -47,7 +48,6 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         // endregion
 
         // Render initial map for prototyping purposes
