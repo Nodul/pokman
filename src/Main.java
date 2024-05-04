@@ -26,8 +26,16 @@ public class Main {
         mainWindowFrame.setSize(600, 500);
         mainWindowFrame.setLocationRelativeTo(null);
 
-        var grid = new GridLayout(12,12,0,0);//(12,12,0,0);
-        mainWindowFrame.setLayout(grid);
+        var gridLayout = new GridLayout(12,12,0,0);//(12,12,0,0);
+        // mainWindowFrame.setLayout(grid);
+        var mapContainerPanel = new JPanel(gridLayout);
+        mainWindowFrame.add(mapContainerPanel);
+
+        //Create a panel and add components to it.
+//        JPanel contentPane = new JPanel(new BorderLayout());
+//        contentPane.setBorder(someBorder);
+//        contentPane.add(someComponent, BorderLayout.CENTER);
+//        contentPane.add(anotherComponent, BorderLayout.PAGE_END);
 
         // region DEBUG MAP
         // Prepare debug map
@@ -65,10 +73,12 @@ public class Main {
 
                 picLabel.setVisible(true);
 
-                mainWindowFrame.add(picLabel);
+                mapContainerPanel.add(picLabel);
             }
         }
 
+        // Finalize
+        mapContainerPanel.setVisible(true);
         mainWindowFrame.setVisible(true);
     }
 
