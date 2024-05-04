@@ -26,8 +26,6 @@ public class Main {
         mainWindowFrame.setSize(600, 500);
         mainWindowFrame.setLocationRelativeTo(null);
 
-        mainWindowFrame.setVisible(true);
-
         var grid = new GridLayout(12,12,0,0);//(12,12,0,0);
         mainWindowFrame.setLayout(grid);
 
@@ -70,6 +68,8 @@ public class Main {
                 mainWindowFrame.add(picLabel);
             }
         }
+
+        mainWindowFrame.setVisible(true);
     }
 
     private static void RunLoop(){
