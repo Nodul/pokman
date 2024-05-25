@@ -4,8 +4,13 @@ a strictly educational project to learn Java+Swing by creating a game
 
 ## TODO
 
-- [ ] add Pokman controls + actual movement
+- [ ] allow only single Cell wide corridors (this is how the original Pacman was designed)
+- [ ] add input buffering, only 1 level deep (original behavior)
 - [ ] add collision detection (so that Enemies can detect Pokman AND nobody can run into walls)
+	- [X] add basic collision detection for just 1 Cell (currently, it's [1,0])
+    - [X] make Pokman stop on entering the forbidden Cell
+    - [ ] make Pokman stop entering the forbidden Cell at all (this will fix the phasing into walls bug)
+    - [ ] add collision detection for all walls
 - [ ] Load SpriteSheet
 - [ ] Split and organize SpriteSheet Sprites
 - [ ] add Pokman animations (via cycling through imported Sprites)
@@ -29,7 +34,9 @@ a strictly educational project to learn Java+Swing by creating a game
 - [X] render the map in Swing
 - [X] manually load placeholder Pokman Sprite
 - [X] add Pokman entity
-
+- [X] add some test movement for Pokman (hardcoded)
+- [X] add Pokman controls + actual movement
+- 
 ## Credits
 
 sprites taken from: https://www.spriters-resource.com/arcade/pacman/

@@ -8,8 +8,11 @@ import java.io.IOException;
 
 public class Main {
     private static Cell[][] map;
+    private static Pokman pokman;
+    private static JLabel pokmanLabel;
+    private static JPanel mapPanel;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         Init();
         RunLoop();
@@ -20,7 +23,7 @@ public class Main {
 
         // Draw main window
         var mainWindowFrame = new JFrame("Pokman");
-        var mapPanel = new JPanel();
+        mapPanel = new JPanel();
 
         mainWindowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         var gridLayout = new GridBagLayout();
@@ -71,10 +74,13 @@ public class Main {
         }
 
         // Render rest of stuff
-        var pokman = new Pokman(1,1);
+        pokman = new Pokman(1,1);
         var cell = map[pokman.GetX()][pokman.GetY()];
-        var pokmanLabel = makeEntity(cell, pokman_test_sprite);
+        pokmanLabel = makeEntity(cell, pokman_test_sprite);
 
+        mainWindowFrame.addKeyListener(new PokmanKeyListener(pokman));
+
+        //mapPanel.add(pokmanLabel);
         mainWindowFrame.add(pokmanLabel);
 
         // Finalize
@@ -102,19 +108,24 @@ public class Main {
         label.setOpaque(true);
         // DEBUG
          //label.setBorder(BorderFactory.createLineBorder(Color.cyan, 1));
-         label.setBounds(cell.GetX() * 28, cell.GetY() * 32,32,32);
+         label.setBounds(cell.GetX() * 28, cell.GetY() * 32,28,32);
         return label;
     }
 
-    private static void RunLoop(){
+    private static void RunLoop() throws InterruptedException {
 
         var isRunning = true;
 
         while(isRunning) {
-
             ProcessInput();
             UpdateGameLogic();
             Render();
+
+            // TODO check time between frames, in order to make it as close to constant as possible
+            // Limit the game loop to 60fps
+            var frameDuration = (1d / 60d) * 1000d;
+           // System.out.println(frameDuration);
+            Thread.sleep((long) frameDuration);
         }
     }
 
@@ -122,8 +133,34 @@ public class Main {
 
     }
 
-    private static void UpdateGameLogic(){
+    private static void UpdateGameLogic() throws InterruptedException {
+        var previousFrameBounds = pokmanLabel.getBounds();
 
+        var direction = pokman.GetCurrentDirection();
+
+        var pokmanBounds = pokmanLabel.getBounds();
+        var OneZero = mapPanel.getComponentAt(1 * 28,0);
+        var oneZeroBounds = OneZero.getBounds();
+
+        var canMove = !pokmanLabel.getBounds().intersects(oneZeroBounds);
+
+
+        if(canMove == false){
+            pokman.SetCurrentDirection(MovementDirection.Stop);
+        }
+
+        if(direction == MovementDirection.E){
+            pokmanLabel.setBounds(previousFrameBounds.x + 1, previousFrameBounds.y + 0, previousFrameBounds.width, previousFrameBounds.height);
+        }
+        else if(direction == MovementDirection.S){
+            pokmanLabel.setBounds(previousFrameBounds.x + 0, previousFrameBounds.y + 1, previousFrameBounds.width, previousFrameBounds.height);
+        }
+        else if(direction == MovementDirection.N){
+            pokmanLabel.setBounds(previousFrameBounds.x + 0, previousFrameBounds.y - 1, previousFrameBounds.width, previousFrameBounds.height);
+        }
+        else if(direction == MovementDirection.W){
+            pokmanLabel.setBounds(previousFrameBounds.x - 1, previousFrameBounds.y + 0, previousFrameBounds.width, previousFrameBounds.height);
+        }
     }
 
     private  static void Render(){
