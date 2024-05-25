@@ -20,11 +20,12 @@ public class Main {
 
         // Draw main window
         var mainWindowFrame = new JFrame("Pokman");
+        var mapPanel = new JPanel();
 
         mainWindowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         var gridLayout = new GridBagLayout();
 
-        mainWindowFrame.setLayout(gridLayout);
+        mapPanel.setLayout(gridLayout);
         mainWindowFrame.setLocationRelativeTo(null);
 
         // region DEBUG MAP
@@ -42,9 +43,11 @@ public class Main {
         // Load test wall
         BufferedImage wall_sprite = null;
         BufferedImage floor_sprite = null;
+        BufferedImage pokman_test_sprite = null;
         try {
             wall_sprite = ImageIO.read(new File("assets\\test_wall.png"));
             floor_sprite = ImageIO.read(new File("assets\\test_floor.png"));
+            pokman_test_sprite = ImageIO.read(new File("assets\\Pacman\\32\\Pacman\\Right_2.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -63,11 +66,19 @@ public class Main {
                 constraints.gridwidth = 1;
                 constraints.gridheight = 1;
 
-                mainWindowFrame.add(picLabel, constraints);
+                mapPanel.add(picLabel, constraints);
             }
         }
 
+        // Render rest of stuff
+        var pokman = new Pokman(1,1);
+        var cell = map[pokman.GetX()][pokman.GetY()];
+        var pokmanLabel = makeEntity(cell, pokman_test_sprite);
+
+        mainWindowFrame.add(pokmanLabel);
+
         // Finalize
+        mainWindowFrame.add(mapPanel);
         mainWindowFrame.pack();
         mainWindowFrame.setVisible(true);
     }
@@ -80,6 +91,18 @@ public class Main {
         label.setOpaque(true);
         // DEBUG
         // label.setBorder(BorderFactory.createLineBorder(Color.cyan, 1));
+        return label;
+    }
+
+    private static JLabel makeEntity(Cell cell, BufferedImage sprite){
+        JLabel label= new JLabel();
+
+        var icon = new ImageIcon(sprite);
+        label.setIcon(icon);
+        label.setOpaque(true);
+        // DEBUG
+         //label.setBorder(BorderFactory.createLineBorder(Color.cyan, 1));
+         label.setBounds(cell.GetX() * 28, cell.GetY() * 32,32,32);
         return label;
     }
 

@@ -4,8 +4,6 @@ a strictly educational project to learn Java+Swing by creating a game
 
 ## TODO
 
-- [ ] manually load placeholder Pokman Sprite
-- [ ] add Pokman entity
 - [ ] add Pokman controls + actual movement
 - [ ] add collision detection (so that Enemies can detect Pokman AND nobody can run into walls)
 - [ ] Load SpriteSheet
@@ -29,6 +27,8 @@ a strictly educational project to learn Java+Swing by creating a game
 - [X] create a basic debug map 
 	- a 12 x 12 map, borders are walls, rest is a floor
 - [X] render the map in Swing
+- [X] manually load placeholder Pokman Sprite
+- [X] add Pokman entity
 
 ## Credits
 
