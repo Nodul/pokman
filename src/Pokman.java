@@ -1,17 +1,17 @@
 public class Pokman {
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private MovementDirection direction;
 
-    public Pokman(int x, int y) {
+    public Pokman(double x, double y) {
         this.x = x;
         this.y = y;
-        direction = MovementDirection.E;
+        direction = MovementDirection.Stop;
     }
 
-    public int GetX() {return this.x;}
+    public double GetX() {return this.x;}
 
-    public  int GetY() {return this.y;}
+    public double GetY() {return this.y;}
 
     public  MovementDirection GetCurrentDirection() {return this.direction;}
 

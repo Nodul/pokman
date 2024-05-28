@@ -1,13 +1,12 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class Main {
-    private static Cell[][] map;
+    private static Map currentMap;
     private static Pokman pokman;
     private static JLabel pokmanLabel;
     private static JPanel mapPanel;
@@ -31,18 +30,10 @@ public class Main {
         mapPanel.setLayout(gridLayout);
         mainWindowFrame.setLocationRelativeTo(null);
 
-        // region DEBUG MAP
         // Prepare debug map
-        map = new Cell[12][12];
+        currentMap = Map.GenerateDebugMap();
 
-        for(int y = 0; y < 12; y++){
-            for(int x = 0; x < 12; x++){
-                var isWall = x == 0 || y == 0 || x == 11 || y == 11;
-                map[x][y] = new Cell(x,y,isWall);
-            }
-        }
-
-        // Load data
+        // Load game data
         // Load test wall
         BufferedImage wall_sprite = null;
         BufferedImage floor_sprite = null;
@@ -54,12 +45,11 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // endregion
 
         // Render initial map for prototyping purposes
         for(int y = 0; y < 12; y++){
             for(int x = 0; x < 12; x++){
-                var cell = map[x][y];
+                var cell = currentMap.GetAt(x,y);
                 JLabel picLabel = makeLabel(cell, wall_sprite, floor_sprite);
 
                 var constraints = new GridBagConstraints();
@@ -75,7 +65,7 @@ public class Main {
 
         // Render rest of stuff
         pokman = new Pokman(1,1);
-        var cell = map[pokman.GetX()][pokman.GetY()];
+        var cell = currentMap.GetAt((int)pokman.GetX(),(int)pokman.GetY());
         pokmanLabel = makeEntity(cell, pokman_test_sprite);
 
         mainWindowFrame.addKeyListener(new PokmanKeyListener(pokman));
