@@ -12,7 +12,6 @@ public class Main {
     private static JPanel mapPanel;
 
     public static void main(String[] args) throws InterruptedException {
-
         Init();
         RunLoop();
         Cleanup();
@@ -120,7 +119,7 @@ public class Main {
     }
 
     private static void ProcessInput(){
-
+        // TODO move stuff here
     }
 
     private static void UpdateGameLogic() throws InterruptedException {
