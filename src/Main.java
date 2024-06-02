@@ -127,8 +127,8 @@ public class Main {
         var currentDirection = pokman.GetCurrentDirection();
         if(pokman.GetCurrentDirection() == MovementDirection.Stop)
             return;
-        // If yes, check if it can actually move
 
+        // If yes, check if it can actually move
         Cell intendedCell = switch(currentDirection){
             case N -> currentMap.GetAt(pokman.GetXIntRound(), pokman.GetYIntRound() - 1);
             case E -> currentMap.GetAt(pokman.GetXIntRound() + 1, pokman.GetYIntRound());

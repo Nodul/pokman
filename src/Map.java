@@ -17,7 +17,7 @@ public class Map {
 
         for(int y = 0; y < 12; y++){
             for(int x = 0; x < 12; x++){
-                var isWall = x == 0 || y == 0 || x == 11 || y == 11;
+                var isWall = x == 0 || y == 0 || x == 11 || y == 11 || (y == 2 && (x >= 2 && x <= 9));
                 cells[x][y] = new Cell(x,y,isWall);
             }
         }
