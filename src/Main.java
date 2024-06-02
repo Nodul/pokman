@@ -123,8 +123,6 @@ public class Main {
     }
 
     private static void UpdateGameLogic() throws InterruptedException {
-        // NEW
-
         // Check if Entity wants to move at all
         var currentDirection = pokman.GetCurrentDirection();
         if(pokman.GetCurrentDirection() == MovementDirection.Stop)
