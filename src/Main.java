@@ -15,7 +15,7 @@ public class Main {
 
         Init();
         RunLoop();
-        // TODO Cleanup();
+        Cleanup();
     }
 
     private static void Init(){
@@ -33,7 +33,7 @@ public class Main {
         // Prepare debug map
         currentMap = Map.GenerateDebugMap();
 
-        // Load game data
+        // Load game data TODO extract into separate class
         // Load test wall
         BufferedImage wall_sprite = null;
         BufferedImage floor_sprite = null;
@@ -154,6 +154,10 @@ public class Main {
     }
 
     private  static void Render(){
+        // TODO move rendering stuff here
+    }
 
+    private static void Cleanup() {
+        // TODO fillout
     }
 }

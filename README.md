@@ -4,11 +4,12 @@ a strictly educational project to learn Java+Swing by creating a game
 
 ## TODO
 
-
-- [ ] keep continous Pokman movement, but make wall collision detection discreet
-    - ghosts and pickups keep continous as well, but put pickups at fixed positions/intervals
+- [ ] keep continuous Pokman movement, but make wall collision detection discreet
+    - ghosts and pickups keep continuous as well, but put pickups at fixed positions/intervals
     while ghosts will behave same as Pokman
+    - in order to make this happen, Pokman  needs to be railroaded during movement (i.e. do not allow changing direction at will, except for reversing)
 - [ ] allow only single Cell wide corridors (this is how the original Pacman was designed)
+- [ ] add GameSession, to make it easier to track game state
 - [ ] add input buffering, only 1 level deep (original behavior)
 - [ ] add collision detection (so that Enemies can detect Pokman AND nobody can run into walls)
 	- [X] add basic collision detection for just 1 Cell (currently, it's [1,0])
