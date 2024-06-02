@@ -123,33 +123,43 @@ public class Main {
     }
 
     private static void UpdateGameLogic() throws InterruptedException {
-        var previousFrameBounds = pokmanLabel.getBounds();
+        // NEW
 
-        var direction = pokman.GetCurrentDirection();
+        // Check if Entity wants to move at all
+        var currentDirection = pokman.GetCurrentDirection();
+        if(pokman.GetCurrentDirection() == MovementDirection.Stop)
+            return;
+        // If yes, check if it can actually move
 
-        var pokmanBounds = pokmanLabel.getBounds();
-        var OneZero = mapPanel.getComponentAt(1 * 28,0);
-        var oneZeroBounds = OneZero.getBounds();
+        Cell intendedCell = switch(currentDirection){
+            case N -> currentMap.GetAt(pokman.GetXIntRound(), pokman.GetYIntRound() - 1);
+            case E -> currentMap.GetAt(pokman.GetXIntRound() + 1, pokman.GetYIntRound());
+            case S -> currentMap.GetAt(pokman.GetXIntRound(), pokman.GetYIntRound() + 1);
+            case W -> currentMap.GetAt(pokman.GetXIntRound() - 1, pokman.GetYIntRound());
+            case Stop -> null; // placeholder, should never enter this point
+        };
 
-        var canMove = !pokmanLabel.getBounds().intersects(oneZeroBounds);
+        if(intendedCell == null){
+            // Out of map bounds, we can safely skip
+            return;
+        }
 
-
-        if(canMove == false){
+        if(intendedCell.GetIsWall()){
+            // Cannot move into wall
             pokman.SetCurrentDirection(MovementDirection.Stop);
+            return;
         }
 
-        if(direction == MovementDirection.E){
-            pokmanLabel.setBounds(previousFrameBounds.x + 1, previousFrameBounds.y + 0, previousFrameBounds.width, previousFrameBounds.height);
-        }
-        else if(direction == MovementDirection.S){
-            pokmanLabel.setBounds(previousFrameBounds.x + 0, previousFrameBounds.y + 1, previousFrameBounds.width, previousFrameBounds.height);
-        }
-        else if(direction == MovementDirection.N){
-            pokmanLabel.setBounds(previousFrameBounds.x + 0, previousFrameBounds.y - 1, previousFrameBounds.width, previousFrameBounds.height);
-        }
-        else if(direction == MovementDirection.W){
-            pokmanLabel.setBounds(previousFrameBounds.x - 1, previousFrameBounds.y + 0, previousFrameBounds.width, previousFrameBounds.height);
-        }
+        switch(currentDirection){
+            case N -> pokman.Translate(0,-1);
+            case E -> pokman.Translate(1,0);
+            case S -> pokman.Translate(0,1);
+            case W -> pokman.Translate(-1,0);
+        };
+
+        // Update UI pos
+        var currentFrameBounds = pokmanLabel.getBounds();
+        pokmanLabel.setBounds((int)pokman.GetX() * 28, (int)pokman.GetY() * 28, currentFrameBounds.width, currentFrameBounds.height);
     }
 
     private  static void Render(){
