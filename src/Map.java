@@ -1,27 +1,49 @@
 public class Map {
 
+    private final int width;
+    private final int height;
+
     private Cell[][] cells;
 
-    public Map(Cell[][] cells){
+
+    public Map(Cell[][] cells, int width, int height){
         this.cells = cells;
+        this.width = width;
+        this.height = height;
     }
     // TODO add Map(int x, int y) for generating maps
 
     public Cell GetAt(int x, int y){
-        // TODO add validation
+        if(x < 0 || y < 0 || x > cells.length || y > cells[0].length){
+            return null;
+        }
+
         return cells[x][y];
     }
 
-    public static Map GenerateDebugMap(){
-        var cells = new Cell[12][12];
+    public Cell GetAtWorld(int x, int y){
+        // this.x * this.width + (this.width / 2) = z;
+        // this.x = (z - (this.width / 2)) / width
 
-        for(int y = 0; y < 12; y++){
-            for(int x = 0; x < 12; x++){
-                var isWall = x == 0 || y == 0 || x == 11 || y == 11 || (y == 2 && (x >= 2 && x <= 9));
-                cells[x][y] = new Cell(x,y,isWall);
+        var mapX = (x - width * 2) / width;
+        var mapY = (y - height * 2) / height;
+
+        return GetAt(mapX, mapY);
+    }
+
+    public  int GetCellWidth() { return width; }
+    public  int GetCellHeight() { return height; }
+
+    public static Map GenerateDebugMap(int width, int height){
+        var cells = new Cell[36][36];
+
+        for(int y = 0; y < 36; y++){
+            for(int x = 0; x < 36; x++){
+                var isWall = x == 0 || y == 0 || x == 35 || y == 35 || (y == 2 && (x >= 2 && x <= 27));
+                cells[x][y] = new Cell(x,y,width,height,isWall);
             }
         }
 
-        return new Map(cells);
+        return new Map(cells, width, height);
     }
 }

@@ -10,6 +10,8 @@ public class Main {
     private static Pokman pokman;
     private static JLabel pokmanLabel;
     private static JPanel mapPanel;
+    private static int cellWidth = 16;
+    private static int cellHeight = 16;
 
     public static void main(String[] args) throws InterruptedException {
         Init();
@@ -24,13 +26,13 @@ public class Main {
         mapPanel = new JPanel();
 
         mainWindowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         var gridLayout = new GridBagLayout();
 
         mapPanel.setLayout(gridLayout);
-        mainWindowFrame.setLocationRelativeTo(null);
 
         // Prepare debug map
-        currentMap = Map.GenerateDebugMap();
+        currentMap = Map.GenerateDebugMap(cellWidth, cellHeight);
 
         // Load game data TODO extract into separate class
         // Load test wall
@@ -46,11 +48,12 @@ public class Main {
         }
 
         // Render initial map for prototyping purposes
-        for(int y = 0; y < 12; y++){
-            for(int x = 0; x < 12; x++){
+        for(int y = 0; y < 36; y++){
+            for(int x = 0; x < 36; x++){
                 var cell = currentMap.GetAt(x,y);
                 JLabel picLabel = makeLabel(cell, wall_sprite, floor_sprite);
-
+                picLabel.setPreferredSize(new Dimension(cellWidth, cellHeight));
+                //picLabel.setSize(cellWidth, cellHeight);
                 var constraints = new GridBagConstraints();
 
                 constraints.gridx = x;
@@ -63,9 +66,9 @@ public class Main {
         }
 
         // Render rest of stuff
-        pokman = new Pokman(1,1);
-        var cell = currentMap.GetAt((int)pokman.GetX(),(int)pokman.GetY());
-        pokmanLabel = makeEntity(cell, pokman_test_sprite);
+        var pokmanStartCell = currentMap.GetAt(1,1);
+        pokman = new Pokman(pokmanStartCell.GetWorldX(), pokmanStartCell.GetWorldY(),30,30);
+        pokmanLabel = makeEntity(pokman, pokman_test_sprite);
 
         mainWindowFrame.addKeyListener(new PokmanKeyListener(pokman));
 
@@ -75,6 +78,7 @@ public class Main {
         // Finalize
         mainWindowFrame.add(mapPanel);
         mainWindowFrame.pack();
+        mainWindowFrame.setLocationRelativeTo(null);
         mainWindowFrame.setVisible(true);
     }
 
@@ -89,7 +93,7 @@ public class Main {
         return label;
     }
 
-    private static JLabel makeEntity(Cell cell, BufferedImage sprite){
+    private static JLabel makeEntity(Pokman pokman, BufferedImage sprite){
         JLabel label= new JLabel();
 
         var icon = new ImageIcon(sprite);
@@ -97,7 +101,7 @@ public class Main {
         label.setOpaque(true);
         // DEBUG
          //label.setBorder(BorderFactory.createLineBorder(Color.cyan, 1));
-         label.setBounds(cell.GetX() * 28, cell.GetY() * 32,28,32);
+         label.setBounds( pokman.GetX(), pokman.GetY(), pokman.GetWidth(), pokman.GetHeight() );
         return label;
     }
 
@@ -130,10 +134,10 @@ public class Main {
 
         // If yes, check if it can actually move
         Cell intendedCell = switch(currentDirection){
-            case N -> currentMap.GetAt(pokman.GetXIntRound(), pokman.GetYIntRound() - 1);
-            case E -> currentMap.GetAt(pokman.GetXIntRound() + 1, pokman.GetYIntRound());
-            case S -> currentMap.GetAt(pokman.GetXIntRound(), pokman.GetYIntRound() + 1);
-            case W -> currentMap.GetAt(pokman.GetXIntRound() - 1, pokman.GetYIntRound());
+            case N -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() - currentMap.GetCellHeight());
+            case E -> currentMap.GetAtWorld(pokman.GetX() + currentMap.GetCellWidth(), pokman.GetY());
+            case S -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() + currentMap.GetCellHeight());
+            case W -> currentMap.GetAtWorld(pokman.GetX() - currentMap.GetCellWidth(), pokman.GetY());
             case Stop -> null; // placeholder, should never enter this point
         };
 
@@ -157,7 +161,7 @@ public class Main {
 
         // Update UI pos
         var currentFrameBounds = pokmanLabel.getBounds();
-        pokmanLabel.setBounds((int)pokman.GetX() * 28, (int)pokman.GetY() * 28, currentFrameBounds.width, currentFrameBounds.height);
+        pokmanLabel.setBounds((int)pokman.GetX(), (int)pokman.GetY(), currentFrameBounds.width, currentFrameBounds.height);
     }
 
     private  static void Render(){

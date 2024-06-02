@@ -4,6 +4,7 @@ a strictly educational project to learn Java+Swing by creating a game
 
 ## TODO
 
+- [ ] fix stopping too soon issue
 - [ ] keep continuous Pokman movement, but make wall collision detection discreet
     - ghosts and pickups keep continuous as well, but put pickups at fixed positions/intervals
     while ghosts will behave same as Pokman
