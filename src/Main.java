@@ -20,7 +20,6 @@ public class Main {
     }
 
     private static void Init(){
-
         // Draw main window
         var mainWindowFrame = new JFrame("Pokman");
         mapPanel = new JPanel();
@@ -147,6 +146,8 @@ public class Main {
             // Out of map bounds, we can safely skip
             return;
         }
+
+        System.out.println(intendedCell.GetX() + ", " + intendedCell.GetY() + ", PACMAN: " + pokman.GetX() + ", " + pokman.GetY());
 
         if(intendedCell.GetIsWall()){
             // Cannot move into wall

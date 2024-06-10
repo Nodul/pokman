@@ -25,10 +25,10 @@ public class Map {
         // this.x * this.width + (this.width / 2) = z;
         // this.x = (z - (this.width / 2)) / width
 
-        var mapX = (x - width * 2) / width;
-        var mapY = (y - height * 2) / height;
+        var mapX = (float)x / width;  // Math.ceilDiv(x, width);  //Math.floorDiv(x, width);//  x / width;
+        var mapY = (float)y / height; // Math.ceilDiv(y, height); //Math.floorDiv(y, height); // y / height;
 
-        return GetAt(mapX, mapY);
+        return GetAt( Math.round(mapX), Math.round(mapY));
     }
 
     public  int GetCellWidth() { return width; }
