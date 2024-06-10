@@ -8,8 +8,8 @@ public class Pokman {
     private MovementDirection direction;
 
     public Pokman(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
+        this.x = x - width / 2;
+        this.y = y - height / 2;
         this.width = width;
         this.height = height;
         direction = MovementDirection.Stop;

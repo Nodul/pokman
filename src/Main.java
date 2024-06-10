@@ -42,7 +42,7 @@ public class Main {
         try {
             wall_sprite = ImageIO.read(new File("assets\\test_wall.png"));
             floor_sprite = ImageIO.read(new File("assets\\test_floor.png"));
-            pokman_test_sprite = ImageIO.read(new File("assets\\Pacman\\32\\Pacman\\Right_2.png"));
+            pokman_test_sprite = ImageIO.read(new File("assets\\test_pakman.png"));//"assets\\Pacman\\32\\Pacman\\Right_2.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -67,7 +67,7 @@ public class Main {
 
         // Render rest of stuff
         var pokmanStartCell = currentMap.GetAt(1,1);
-        pokman = new Pokman(pokmanStartCell.GetWorldX(), pokmanStartCell.GetWorldY(),30,30);
+        pokman = new Pokman(pokmanStartCell.GetWorldX(), pokmanStartCell.GetWorldY(),16,16);
         pokmanLabel = makeEntity(pokman, pokman_test_sprite);
 
         mainWindowFrame.addKeyListener(new PokmanKeyListener(pokman));
@@ -127,6 +127,8 @@ public class Main {
     }
 
     private static void UpdateGameLogic() throws InterruptedException {
+        //pokmanLabel.getBounds().intersects()
+
         // Check if Entity wants to move at all
         var currentDirection = pokman.GetCurrentDirection();
         if(pokman.GetCurrentDirection() == MovementDirection.Stop)
