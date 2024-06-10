@@ -28,7 +28,7 @@ public class Map {
         var mapX = (float)x / width;  // Math.ceilDiv(x, width);  //Math.floorDiv(x, width);//  x / width;
         var mapY = (float)y / height; // Math.ceilDiv(y, height); //Math.floorDiv(y, height); // y / height;
 
-        return GetAt( Math.round(mapX), Math.round(mapY));
+        return GetAt(Math.round(mapX), Math.round(mapY));
     }
 
     public  int GetCellWidth() { return width; }

@@ -135,10 +135,10 @@ public class Main {
 
         // If yes, check if it can actually move
         Cell intendedCell = switch(currentDirection){
-            case N -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() - currentMap.GetCellHeight());
-            case E -> currentMap.GetAtWorld(pokman.GetX() + currentMap.GetCellWidth(), pokman.GetY());
-            case S -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() + currentMap.GetCellHeight());
-            case W -> currentMap.GetAtWorld(pokman.GetX() - currentMap.GetCellWidth(), pokman.GetY());
+            case N -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() - currentMap.GetCellHeight() / 2);
+            case E -> currentMap.GetAtWorld(pokman.GetX() + currentMap.GetCellWidth() / 2, pokman.GetY());
+            case S -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() + currentMap.GetCellHeight() / 2);
+            case W -> currentMap.GetAtWorld(pokman.GetX() - currentMap.GetCellWidth() / 2, pokman.GetY());
             case Stop -> null; // placeholder, should never enter this point
         };
 
@@ -164,7 +164,7 @@ public class Main {
 
         // Update UI pos
         var currentFrameBounds = pokmanLabel.getBounds();
-        pokmanLabel.setBounds((int)pokman.GetX(), (int)pokman.GetY(), currentFrameBounds.width, currentFrameBounds.height);
+        pokmanLabel.setBounds(pokman.GetX(), pokman.GetY(), currentFrameBounds.width, currentFrameBounds.height);
     }
 
     private  static void Render(){
