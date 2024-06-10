@@ -25,16 +25,16 @@ public class PokmanKeyListener implements KeyListener {
     public void keyReleased(KeyEvent e) {
         //System.out.println(e.getKeyChar());
         if(e.getKeyChar() == 's'){
-            pokman.SetCurrentDirection(MovementDirection.S);
+            pokman.SetIntendedDirection(MovementDirection.S);
         }
         else if(e.getKeyChar() == 'd'){
-            pokman.SetCurrentDirection(MovementDirection.E);
+            pokman.SetIntendedDirection(MovementDirection.E);
         }
         else if(e.getKeyChar() == 'w'){
-            pokman.SetCurrentDirection(MovementDirection.N);
+            pokman.SetIntendedDirection(MovementDirection.N);
         }
         else if(e.getKeyChar() == 'a'){
-            pokman.SetCurrentDirection(MovementDirection.W);
+            pokman.SetIntendedDirection(MovementDirection.W);
         }
     }
 }

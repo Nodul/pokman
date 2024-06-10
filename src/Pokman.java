@@ -6,6 +6,7 @@ public class Pokman {
     private int width;
     private int height;
     private MovementDirection direction;
+    private MovementDirection directionInputBuffer = null;
 
     public Pokman(int x, int y, int width, int height) {
         this.x = x - width / 2;
@@ -24,7 +25,11 @@ public class Pokman {
 
     public  MovementDirection GetCurrentDirection() {return this.direction;}
 
+    public  MovementDirection GetIntendedDirection() {return this.directionInputBuffer;}
+
     public void SetCurrentDirection(MovementDirection direction) {this.direction = direction;}
+
+    public  void SetIntendedDirection(MovementDirection direction) {this.directionInputBuffer = direction;}
 
     public void Translate(int x, int y) {
         this.x += x;

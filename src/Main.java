@@ -19,7 +19,7 @@ public class Main {
         Cleanup();
     }
 
-    private static void Init(){
+    private static void Init() {
         // Draw main window
         var mainWindowFrame = new JFrame("Pokman");
         mapPanel = new JPanel();
@@ -47,9 +47,9 @@ public class Main {
         }
 
         // Render initial map for prototyping purposes
-        for(int y = 0; y < 36; y++){
-            for(int x = 0; x < 36; x++){
-                var cell = currentMap.GetAt(x,y);
+        for (int y = 0; y < 36; y++) {
+            for (int x = 0; x < 36; x++) {
+                var cell = currentMap.GetAt(x, y);
                 JLabel picLabel = makeLabel(cell, wall_sprite, floor_sprite);
                 picLabel.setPreferredSize(new Dimension(cellWidth, cellHeight));
                 //picLabel.setSize(cellWidth, cellHeight);
@@ -65,8 +65,8 @@ public class Main {
         }
 
         // Render rest of stuff
-        var pokmanStartCell = currentMap.GetAt(1,1);
-        pokman = new Pokman(pokmanStartCell.GetWorldX(), pokmanStartCell.GetWorldY(),16,16);
+        var pokmanStartCell = currentMap.GetAt(1, 1);
+        pokman = new Pokman(pokmanStartCell.GetWorldX(), pokmanStartCell.GetWorldY(), 16, 16);
         pokmanLabel = makeEntity(pokman, pokman_test_sprite);
 
         mainWindowFrame.addKeyListener(new PokmanKeyListener(pokman));
@@ -81,8 +81,8 @@ public class Main {
         mainWindowFrame.setVisible(true);
     }
 
-    private static JLabel makeLabel(Cell cell, BufferedImage wall_sprite, BufferedImage floor_sprite){
-        JLabel label= new JLabel();
+    private static JLabel makeLabel(Cell cell, BufferedImage wall_sprite, BufferedImage floor_sprite) {
+        JLabel label = new JLabel();
 
         var icon = new ImageIcon(cell.GetIsWall() ? wall_sprite : floor_sprite);
         label.setIcon(icon);
@@ -92,15 +92,15 @@ public class Main {
         return label;
     }
 
-    private static JLabel makeEntity(Pokman pokman, BufferedImage sprite){
-        JLabel label= new JLabel();
+    private static JLabel makeEntity(Pokman pokman, BufferedImage sprite) {
+        JLabel label = new JLabel();
 
         var icon = new ImageIcon(sprite);
         label.setIcon(icon);
         label.setOpaque(true);
         // DEBUG
-         //label.setBorder(BorderFactory.createLineBorder(Color.cyan, 1));
-         label.setBounds( pokman.GetX(), pokman.GetY(), pokman.GetWidth(), pokman.GetHeight() );
+        //label.setBorder(BorderFactory.createLineBorder(Color.cyan, 1));
+        label.setBounds(pokman.GetX(), pokman.GetY(), pokman.GetWidth(), pokman.GetHeight());
         return label;
     }
 
@@ -108,7 +108,7 @@ public class Main {
 
         var isRunning = true;
 
-        while(isRunning) {
+        while (isRunning) {
             ProcessInput();
             UpdateGameLogic();
             Render();
@@ -116,25 +116,30 @@ public class Main {
             // TODO check time between frames, in order to make it as close to constant as possible
             // Limit the game loop to 60fps
             var frameDuration = (1d / 60d) * 1000d;
-           // System.out.println(frameDuration);
+            // System.out.println(frameDuration);
             Thread.sleep((long) frameDuration);
         }
     }
 
-    private static void ProcessInput(){
+    private static void ProcessInput() {
         // TODO move stuff here
     }
 
     private static void UpdateGameLogic() throws InterruptedException {
-        //pokmanLabel.getBounds().intersects()
+        var intendedDirection = ResolveInputBuffer();
 
         // Check if Entity wants to move at all
+        if (intendedDirection == null) {
+            intendedDirection = MovementDirection.Stop;
+        }
+
+        pokman.SetCurrentDirection(intendedDirection);
         var currentDirection = pokman.GetCurrentDirection();
-        if(pokman.GetCurrentDirection() == MovementDirection.Stop)
+        if (pokman.GetCurrentDirection() == MovementDirection.Stop)
             return;
 
         // If yes, check if it can actually move
-        Cell intendedCell = switch(currentDirection){
+        Cell intendedCell = switch (currentDirection) {
             case N -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() - currentMap.GetCellHeight() / 2);
             case E -> currentMap.GetAtWorld(pokman.GetX() + currentMap.GetCellWidth() / 2, pokman.GetY());
             case S -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() + currentMap.GetCellHeight() / 2);
@@ -142,32 +147,81 @@ public class Main {
             case Stop -> null; // placeholder, should never enter this point
         };
 
-        if(intendedCell == null){
+        if (intendedCell == null) {
             // Out of map bounds, we can safely skip
             return;
         }
 
+        // TODO remove
         System.out.println(intendedCell.GetX() + ", " + intendedCell.GetY() + ", PACMAN: " + pokman.GetX() + ", " + pokman.GetY());
 
-        if(intendedCell.GetIsWall()){
+        if (intendedCell.GetIsWall()) {
             // Cannot move into wall
             pokman.SetCurrentDirection(MovementDirection.Stop);
             return;
         }
 
-        switch(currentDirection){
-            case N -> pokman.Translate(0,-1);
-            case E -> pokman.Translate(1,0);
-            case S -> pokman.Translate(0,1);
-            case W -> pokman.Translate(-1,0);
-        };
+        switch (currentDirection) {
+            case N -> pokman.Translate(0, -1);
+            case E -> pokman.Translate(1, 0);
+            case S -> pokman.Translate(0, 1);
+            case W -> pokman.Translate(-1, 0);
+        }
+        ;
 
+        // TODO move to render
         // Update UI pos
         var currentFrameBounds = pokmanLabel.getBounds();
         pokmanLabel.setBounds(pokman.GetX(), pokman.GetY(), currentFrameBounds.width, currentFrameBounds.height);
     }
 
-    private  static void Render(){
+    private static MovementDirection ResolveInputBuffer() {
+        // Check buffer
+        var intendedDirection = pokman.GetIntendedDirection();
+
+        // Do I want to turn?
+        if (intendedDirection == null) {
+            return pokman.GetCurrentDirection();
+        }
+
+        // Do I want to reverse? // TODO ghosts need it after Pokman eats power pellet, only case when ghosts can retreat
+        // YES, then reverse
+        // var shouldReverse = intendedDirection.ordinal() < 2 ? intendedDirection.ordinal() + 2 : intendedDirection.ordinal() - 2;
+        // NO, continue
+
+        // Check if at center of cell
+        var isAtCenterOfCell =
+                pokman.GetX() % pokman.GetWidth() == 0
+                && pokman.GetY() % pokman.GetHeight() == 0;
+
+        if (!isAtCenterOfCell) {
+            return pokman.GetCurrentDirection();
+        }
+
+        // TODO Check if at crossroads (mostly for Ghosts, Pokman doesn't need this one)
+
+        // TODO extract to method
+        var intendedCell = switch (intendedDirection) {
+            case N -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() - currentMap.GetCellHeight() / 2);
+            case E -> currentMap.GetAtWorld(pokman.GetX() + currentMap.GetCellWidth() / 2, pokman.GetY());
+            case S -> currentMap.GetAtWorld(pokman.GetX(), pokman.GetY() + currentMap.GetCellHeight() / 2);
+            case W -> currentMap.GetAtWorld(pokman.GetX() - currentMap.GetCellWidth() / 2, pokman.GetY());
+            case Stop -> null; // placeholder, should never enter this point
+        };
+
+        // Check if I can turn
+        if(intendedCell.GetIsWall()){
+            // IF no, don't turn, BUT KEEP Buffer intact
+            return pokman.GetCurrentDirection();
+        }
+        else{
+            // IF yes, turn (change current direction + flush buffer)
+            pokman.SetIntendedDirection(null);
+            return intendedDirection;
+        }
+    }
+
+    private static void Render() {
         // TODO move rendering stuff here
     }
 
